@@ -1,24 +1,25 @@
-import logo from './logo.svg';
 import './App.css';
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
+
+import Navbar from './components/navbar'
+import TasksList from './components/tasksList.js'
+import EditTask from './components/editTask.js'
+import CreateTask from './components/createTask.js'
+import CreateUser from './components/createUser.js'
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <Navbar/>
+      <div className="container">
+        <Routes>
+          <Route path='/' element={<TasksList/>}/>
+          <Route path='/edit/:id' element={<EditTask/>}/>
+          <Route path='/create' element={<CreateTask/>}/>
+          <Route path='/user' element={<CreateUser/>}/>
+        </Routes>
+      </div>
+    </Router>
   );
 }
 
