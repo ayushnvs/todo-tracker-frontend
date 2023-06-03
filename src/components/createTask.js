@@ -194,7 +194,7 @@ export default class CreateTask extends Component {
                     </div>
 
                     <div className="form-group mt-3">
-                        <input type="submit" value="Create Exercise Log" className="btn btn-primary" />
+                        <input type="submit" value="Create Task" className="btn btn-primary" />
                     </div>
                 </form>
             </div>
