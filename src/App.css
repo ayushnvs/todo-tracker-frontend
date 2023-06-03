@@ -29,8 +29,15 @@ table > thead > tr > th:nth-child(3) {
   width: 400px;
 }
 
-div.task-updates {
+.task-updates {
   border: none;
+  display: flex;
+  align-items: center;
+  height: 50px;
+}
+
+.border-red {
+  border: 1px solid red;
 }
 
 div.task-updates:hover {

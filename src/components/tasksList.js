@@ -10,6 +10,7 @@ export default class TasksList extends Component {
 
     this.deleteTask = this.deleteTask.bind(this)
     this.updateData = this.updateData.bind(this)
+    this.handlingInputTag = this.handlingInputTag.bind(this)
 
     this.state = {
       tasks: [],
@@ -44,16 +45,47 @@ export default class TasksList extends Component {
     })
   }
 
-  async updateData(e, currentTask, data, key) {
+  async updateData(e, data, key) {
     let updatedTasks = this.state.tasks
+    console.log(e.currentTarget.value)
     updatedTasks[key][data] = e.currentTarget.value
     await this.setState({
       task: updatedTasks
     })
-    const newDataObj = { status: this.state.tasks[key][data] }
+    const newDataObj = {}
+    newDataObj[data] = this.state.tasks[key][data]
     console.log(newDataObj)
-    axios.post(`http://localhost:5000/tasks/update/${data}/` + currentTask._id, newDataObj)
+    axios.post(`http://localhost:5000/tasks/update/${data}/` + updatedTasks[key]._id, newDataObj)
       .then(res => console.log(`${data.toUpperCase()} Updated`))
+      .catch(err => console.log(err))
+  }
+
+  handlingInputTag () {
+    let divNode = document.querySelectorAll('div.task-updates')
+    let inputBox = document.querySelectorAll('input.task-updates')
+    inputBox.forEach((el, key) => {
+      el.style.display = 'none'
+      el.addEventListener('focus', () => {
+        console.log('Got focus')
+      })
+      el.addEventListener('blur', async (e) => {
+        // e.preventDefault()
+        console.log('Lost focus')
+        divNode[key].innerText = e.currentTarget.value
+        el.style.display = 'none'
+        divNode[key].setAttribute('class', el.getAttribute('class').replace('d-none', ''))
+        await this.updateData(e, 'updates', key)
+      })
+    })
+    divNode.forEach((el, key) => {
+      el.addEventListener('click', () => {
+        let currentUpdate = el.innerText
+        el.setAttribute('class', el.getAttribute('class') + ' d-none')
+        inputBox[key].setAttribute('value', currentUpdate)
+        inputBox[key].style.display = 'block'
+        inputBox[key].focus()
+      })
+    })
   }
 
   render() {
@@ -85,7 +117,7 @@ export default class TasksList extends Component {
                           className="form-control task-status border-light-subtle text-center"
                           id="status"
                           name="status"
-                          onChange={(e) => { this.updateData(e, currentTask, "status", key) }}
+                          onChange={(e) => { this.updateData(e, "status", key) }}
                           value={this.state.tasks[key].status}
                         >
                           {this.state.statusList.map(function (status) {
@@ -113,6 +145,7 @@ export default class TasksList extends Component {
                   </tr>
                 })
               }
+              {this.handlingInputTag()}
             </tbody>
           </table>
         </div>
