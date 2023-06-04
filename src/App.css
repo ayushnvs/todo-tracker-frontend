@@ -17,8 +17,12 @@
   table-layout: fixed;
 } */
 
+.status-done {
+  width: 110px;
+}
+
 table > thead > tr > th:nth-child(1) {
-  width: 130px;
+  width: 125px;
 }
 
 table > thead > tr > th:nth-child(2) {
@@ -27,6 +31,10 @@ table > thead > tr > th:nth-child(2) {
 
 table > thead > tr > th:nth-child(3) {
   width: 400px;
+}
+
+table > thead > tr > th:nth-child(6) {
+  width: 125px;
 }
 
 .task-updates {

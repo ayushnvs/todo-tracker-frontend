@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import TaskUpdates from './taskUpdates'
+import Dropdowns from './dropdowns'
 import axios from 'axios'
 
 export default class TasksList extends Component {
@@ -27,8 +28,17 @@ export default class TasksList extends Component {
         this.setState({
           tasks: res.data.reverse(),
           categoryList: ['Office', 'Personal', 'Other'],
-          statusList: ['New', 'In Progress', 'Done'],
+          statusList: ['New', 'In Progress', 'Pending', 'Blocked', 'Done'],
           priorityList: ['P0', 'P1', 'P2', 'P3', 'P4', 'NP'],
+        })
+      })
+      .catch(err => {
+        console.log(err)
+      })
+    axios.get('http://localhost:5000/users')
+      .then(res => {
+        this.setState({
+          users: res.data.map(user => user.username)
         })
       })
       .catch(err => {
@@ -60,14 +70,11 @@ export default class TasksList extends Component {
       .catch(err => console.log(err))
   }
 
-  handlingInputTag () {
+  handlingInputTag() {
     let divNode = document.querySelectorAll('div.task-updates')
     let inputBox = document.querySelectorAll('input.task-updates')
     inputBox.forEach((el, key) => {
       el.style.display = 'none'
-      el.addEventListener('focus', () => {
-        console.log('Got focus')
-      })
       el.addEventListener('blur', async (e) => {
         // e.preventDefault()
         console.log('Lost focus')
@@ -91,8 +98,20 @@ export default class TasksList extends Component {
   render() {
     return (
       <div className='mt-3'>
-        <h3 className='mt-5 d-inline'>Logged tasks</h3>
-        <Link className="btn btn-primary d-inline ms-5" to="/create">Add New Task</Link>
+        <div className="header row align-items-center">
+          <div className='col-4'>
+            <h3>Logged tasks</h3>
+          </div>
+          <div className='col-4'>
+            <Link className="btn btn-primary ms-5" to="/create">Add New Task</Link>
+          </div>
+          <div className="show-columns col-4">
+            <div>
+              <label htmlFor="category">Show Category</label>
+              <input type="checkbox" />
+            </div>
+          </div>
+        </div>
         <div className="table-responsive">
           <table className="table mt-5">
             <thead className="thead-light">
@@ -103,7 +122,7 @@ export default class TasksList extends Component {
                 <th>Category</th>
                 <th>Prority</th>
                 <th>User</th>
-                <th>Options</th>
+                {/* <th>Options</th> */}
               </tr>
             </thead>
             <tbody>
@@ -111,37 +130,25 @@ export default class TasksList extends Component {
                 this.state.tasks.map((currentTask, key) => {
                   return <tr key={currentTask._id}>
                     <td>
-                      <form>
-                        <select
-                          required
-                          className="form-control task-status border-light-subtle text-center"
-                          id="status"
-                          name="status"
-                          onChange={(e) => { this.updateData(e, "status", key) }}
-                          value={this.state.tasks[key].status}
-                        >
-                          {this.state.statusList.map(function (status) {
-                            return <option
-                              className='dropdown-item'
-                              key={status}
-                              value={status}>
-                              {status}
-                            </option>
-                          })}
-                        </select>
-                      </form>
+                      <Dropdowns name={"status"} dataList={this.state.statusList} task={currentTask} updateData={this.updateData} key={key} index={key} />
                     </td>
                     <td>
                       <div className="blockquote">{currentTask.name}</div>
                       {/* <div className="blockquote-footer">{currentTask.description}</div> */}
                     </td>
                     <td>
-                      <TaskUpdates currentTask={currentTask} key={key}/>
+                      <TaskUpdates currentTask={currentTask} key={key} />
                     </td>
-                    <td>{currentTask.category}</td>
-                    <td>{currentTask.priority}</td>
-                    <td>{currentTask.username}</td>
-                    <td><Link to={"/edit/" + currentTask._id}>edit</Link> | <button className='delete-task link-button d-none' onClick={() => { this.deleteTask(currentTask._id) }}>delete</button></td>
+                    <td>
+                      <Dropdowns name={"category"} dataList={this.state.categoryList} task={currentTask} updateData={this.updateData} key={key} index={key} />
+                    </td>
+                    <td>
+                      <Dropdowns name={"priority"} dataList={this.state.priorityList} task={currentTask} updateData={this.updateData} key={key} index={key} />
+                    </td>
+                    <td>
+                      <Dropdowns name={"username"} dataList={this.state.users} task={currentTask} updateData={this.updateData} key={key} index={key} />
+                    </td>
+                    {/* <td><Link to={"/edit/" + currentTask._id}>edit</Link> | <button className='delete-task link-button d-none' onClick={() => { this.deleteTask(currentTask._id) }}>delete</button></td> */}
                   </tr>
                 })
               }
