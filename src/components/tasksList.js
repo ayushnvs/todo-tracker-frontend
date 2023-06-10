@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import TaskUpdates from './taskUpdates'
 import Dropdowns from './dropdowns'
+import FilterOptions from './filterOptions'
 import axios from 'axios'
 
 export default class TasksList extends Component {
@@ -66,7 +67,7 @@ export default class TasksList extends Component {
     axios.post(`http://localhost:5000/tasks/update/${data}/` + updatedTasks[key]._id, newDataObj)
       .then(res => console.log(`${data.toUpperCase()} Updated`))
       .catch(err => console.log(err))
-      
+
     this.setState({
       task: updatedTasks
     })
@@ -83,10 +84,7 @@ export default class TasksList extends Component {
             <Link className="btn btn-primary ms-5" to="/create">Add New Task</Link>
           </div>
           <div className="show-columns col-4">
-            <div>
-              <label htmlFor="category">Show Category</label>
-              <input type="checkbox" />
-            </div>
+            <FilterOptions/>
           </div>
         </div>
         <div className="table-responsive">

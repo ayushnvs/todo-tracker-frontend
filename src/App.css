@@ -8,14 +8,23 @@
   padding: 0;
 }
 
+.filter {
+  width: 200px;
+}
+
+.task-filter {
+  width: 200px;
+  background-color: white;
+  position: absolute;
+}
+
+.task-filter label {
+  margin-left: 15px;
+}
+
 .delete-task {
   color: rgb(13,110,253);
 }
-
-/* table {
-  word-wrap: break-word;
-  table-layout: fixed;
-} */
 
 .status-done {
   width: 110px;

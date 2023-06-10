@@ -39,14 +39,14 @@ class TaskUpdates extends React.Component {
   render() {
     return (
       this.props.currentTask.status === "Done" && this.props.currentTask.username !== "ayushvns" ?
-        <div className="form-control task-updates-done">
+        <div className="form-control task-updates-done overflow-y-auto">
           {this.props.currentTask.updates.length > 0 ? this.props.currentTask.updates.slice(-1)[0] : ''}
         </div>
         :
         <form onSubmit={(e) => {
           e.preventDefault()
         }}>
-          <div ref={this.updatesDiv} className="task-updates form-control">{this.props.currentTask.updates.length > 0 ? this.props.currentTask.updates.slice(-1)[0] : ''}</div>
+          <div ref={this.updatesDiv} className="task-updates form-control overflow-y-auto">{this.props.currentTask.updates.length > 0 ? this.props.currentTask.updates.slice(-1)[0] : ''}</div>
           <input ref={this.updatesInput} type="text" className="task-updates form-control border-white" />
         </form>
     );
