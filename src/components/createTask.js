@@ -26,7 +26,7 @@ export default class CreateTask extends Component {
                 if (response.data.length > 0) {
                     this.setState({
                         categoryList: ['Office', 'Personal', 'Other'],
-                        category: 'Other',
+                        category: 'Personal',
                         users: response.data.map(user => user.username),
                         username: 'ayush',
                         statusList: ['New', 'In Progress', 'Done'],

@@ -11,7 +11,6 @@ export default class TasksList extends Component {
 
     this.deleteTask = this.deleteTask.bind(this)
     this.updateData = this.updateData.bind(this)
-    this.handlingInputTag = this.handlingInputTag.bind(this)
 
     this.state = {
       tasks: [],
@@ -57,41 +56,19 @@ export default class TasksList extends Component {
 
   async updateData(e, data, key) {
     let updatedTasks = this.state.tasks
-    console.log(e.currentTarget.value)
-    updatedTasks[key][data] = e.currentTarget.value
-    await this.setState({
-      task: updatedTasks
-    })
+    if (data === "updates") updatedTasks[key][data].push(e.currentTarget.value.trim())
+    else updatedTasks[key][data] = e.currentTarget.value.trim()
+
     const newDataObj = {}
-    newDataObj[data] = this.state.tasks[key][data]
+    newDataObj[data] = e.currentTarget.value.trim()
     console.log(newDataObj)
+
     axios.post(`http://localhost:5000/tasks/update/${data}/` + updatedTasks[key]._id, newDataObj)
       .then(res => console.log(`${data.toUpperCase()} Updated`))
       .catch(err => console.log(err))
-  }
-
-  handlingInputTag() {
-    let divNode = document.querySelectorAll('div.task-updates')
-    let inputBox = document.querySelectorAll('input.task-updates')
-    inputBox.forEach((el, key) => {
-      el.style.display = 'none'
-      el.addEventListener('blur', async (e) => {
-        // e.preventDefault()
-        console.log('Lost focus')
-        divNode[key].innerText = e.currentTarget.value
-        el.style.display = 'none'
-        divNode[key].setAttribute('class', el.getAttribute('class').replace('d-none', ''))
-        await this.updateData(e, 'updates', key)
-      })
-    })
-    divNode.forEach((el, key) => {
-      el.addEventListener('click', () => {
-        let currentUpdate = el.innerText
-        el.setAttribute('class', el.getAttribute('class') + ' d-none')
-        inputBox[key].setAttribute('value', currentUpdate)
-        inputBox[key].style.display = 'block'
-        inputBox[key].focus()
-      })
+      
+    this.setState({
+      task: updatedTasks
     })
   }
 
@@ -137,7 +114,7 @@ export default class TasksList extends Component {
                       {/* <div className="blockquote-footer">{currentTask.description}</div> */}
                     </td>
                     <td>
-                      <TaskUpdates currentTask={currentTask} key={key} />
+                      <TaskUpdates currentTask={currentTask} key={key} updateData={this.updateData} taskKey={key} />
                     </td>
                     <td>
                       <Dropdowns name={"category"} dataList={this.state.categoryList} task={currentTask} updateData={this.updateData} key={key} index={key} />
@@ -152,7 +129,6 @@ export default class TasksList extends Component {
                   </tr>
                 })
               }
-              {this.handlingInputTag()}
             </tbody>
           </table>
         </div>

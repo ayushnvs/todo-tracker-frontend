@@ -1,22 +1,17 @@
 import React from 'react'
 
-export default function Dropdowns(props) {
+function Form(props) {
   return (
-    props.name === 'status' && props.task[props.name] === 'Done' ?
-    <div className="btn btn-success status-done">
-      Done
-    </div>
-    : 
     <form>
       <select
         required
         className="form-control task-status border-light-subtle text-center"
-        id={props.name}
-        name={props.name}
-        onChange={(e) => { props.updateData(e, props.name, props.index) }}
-        value={props.task[props.name]}
+        id={props.data.name}
+        name={props.data.name}
+        onChange={(e) => { props.data.updateData(e, props.data.name, props.data.index) }}
+        value={props.data.task[props.data.name]}
       >
-        {props.dataList.map(function (data) {
+        {props.data.dataList.map(function (data) {
           return <option
             className='dropdown-item'
             key={data}
@@ -26,5 +21,23 @@ export default function Dropdowns(props) {
         })}
       </select>
     </form>
+  )
+}
+
+
+export default function Dropdowns(props) {
+  // console.log('props 1: ', props)
+  return (
+    props.task["status"] === 'Done' ?
+    props.name === 'status' ?
+    <div className="btn btn-success status-done" update-id={props.task._id}>
+      Done
+    </div>
+    :
+    <div className="btn">
+      {props.task[props.name]}
+    </div>
+    : 
+    <Form data={props}/>
   )
 }

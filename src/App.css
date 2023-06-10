@@ -37,7 +37,7 @@ table > thead > tr > th:nth-child(6) {
   width: 125px;
 }
 
-.task-updates {
+.task-updates, .task-updates-done {
   border: none;
   display: flex;
   align-items: center;
