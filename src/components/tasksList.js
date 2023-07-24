@@ -1,4 +1,4 @@
-import React, { Component, createRef } from 'react'
+import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import TaskUpdates from './taskUpdates'
 import Dropdowns from './dropdowns'
@@ -29,6 +29,7 @@ export default class TasksList extends Component {
     this.handlePriorityChange = this.handlePriorityChange.bind(this)
     this.handleUserChange = this.handleUserChange.bind(this)
     this.handleOptionChange = this.handleOptionChange.bind(this)
+    this.filterOnStatus = this.filterOnStatus.bind(this)
 
     this.state = {
       tasks: [],
@@ -114,10 +115,6 @@ export default class TasksList extends Component {
     let updatedFilter = this.state.filters
     updatedFilter[0].showCategory = !updatedFilter[0].showCategory
 
-    console.log(this.categoryDataNode)
-    this.changeDisplay(this.categoryHeadNode.current)
-    this.changeDisplay(this.categoryDataNode.current)
-
     this.setState({
       filters: updatedFilter
     })
@@ -136,9 +133,6 @@ export default class TasksList extends Component {
     let updatedFilter = this.state.filters
     updatedFilter[0].showUser = !updatedFilter[0].showUser
 
-    this.changeDisplay(this.userHeadNode.current)
-    this.changeDisplay(this.userDataNode.current)
-
     this.setState({
       filters: updatedFilter
     })
@@ -148,11 +142,16 @@ export default class TasksList extends Component {
     let updatedFilter = this.state.filters
     updatedFilter[0].showOption = !updatedFilter[0].showOption
 
-    this.changeDisplay(this.optionHeadNode.current)
-    this.changeDisplay(this.optionDataNode.current)
-
     this.setState({
       filters: updatedFilter
+    })
+  }
+
+  filterOnStatus () {
+    let defaultTaskList = this.state.tasks
+    let filterOnStatus = [...defaultTaskList.filter(task => task.status === 'In Progress'), ...defaultTaskList.filter(task => task.status === 'New'), ...defaultTaskList.filter(task => task.status === 'Pending'), ...defaultTaskList.filter(task => task.status === 'Blocked'), ...defaultTaskList.filter(task => task.status === 'Done')]
+    this.setState({
+      tasks: filterOnStatus
     })
   }
 
@@ -169,9 +168,9 @@ export default class TasksList extends Component {
           <div className="show-columns col-4">
             {
               this.state.filters.length > 0
-              ?
-              <FilterOptions filters={this.state.filters} handleCategoryChange={this.handleCategoryChange} handleOptionChange={this.handleOptionChange} handlePriorityChange={this.handlePriorityChange} handleUserChange={this.handleUserChange}/>
-              : null
+                ?
+                <FilterOptions filters={this.state.filters} handleCategoryChange={this.handleCategoryChange} handleOptionChange={this.handleOptionChange} handlePriorityChange={this.handlePriorityChange} handleUserChange={this.handleUserChange} />
+                : null
             }
 
           </div>
@@ -180,17 +179,22 @@ export default class TasksList extends Component {
           <table className="table mt-5">
             <thead className="thead-light">
               <tr>
-                <th ref={this.statusHeadNode} >Status</th>
+                <th ref={this.statusHeadNode} onClick={this.filterOnStatus} >Status</th>
                 <th ref={this.nameHeadNode}>Task Name</th>
                 <th ref={this.updatesHeadNode}>Updates</th>
-                <th ref={this.categoryHeadNode}>Category</th>
-                {console.log('s', this.state.filters[0].showUser)}
-                { this.state.filters ?
-                // <th>Prority</th>
-                console.log('Hey', this.state.filters[0])
-                : null }
-                <th ref={this.userHeadNode}>User</th>
-                <th ref={this.optionHeadNode}>Options</th>
+                {this.state.filters.length > 0 ? this.state.filters[0].showCategory ?
+                  <th>Category</th>
+                  : null : null}
+                {this.state.filters.length > 0 ? this.state.filters[0].showPriority ?
+                  <th>Prority</th>
+                  : null : null}
+                {this.state.filters.length > 0 ? this.state.filters[0].showUser ?
+                  <th>User</th>
+                  : null : null}
+                {this.state.filters.length > 0 ? this.state.filters[0].showOption ?
+                  <th>Options</th>
+                  : null : null}
+
               </tr>
             </thead>
             <tbody>
@@ -207,25 +211,34 @@ export default class TasksList extends Component {
                     <td ref={this.updatesDataNode}>
                       <TaskUpdates currentTask={currentTask} key={key} updateData={this.updateData} taskKey={key} />
                     </td>
-                    <td ref={this.categoryDataNode}>
-                      <Dropdowns name={"category"} dataList={this.state.categoryList} task={currentTask} updateData={this.updateData} key={key} index={key} />
-                    </td>
-                    { this.state.filters[0].showPriority ?
-                    <td>
-                      <Dropdowns name={"priority"} dataList={this.state.priorityList} task={currentTask} updateData={this.updateData} key={key} index={key} />
-                    </td>
-                    : null }
-                    <td ref={this.userDataNode}>
-                      <Dropdowns name={"username"} dataList={this.state.users} task={currentTask} updateData={this.updateData} key={key} index={key} />
-                    </td>
-                    <td ref={this.optionDataNode}><Link to={"/edit/" + currentTask._id}>edit</Link> | <button className='delete-task link-button d-none' onClick={() => { this.deleteTask(currentTask._id) }}>delete</button></td>
+                    {this.state.filters[0].showCategory ?
+                      <td>
+                        <Dropdowns name={"category"} dataList={this.state.categoryList} task={currentTask} updateData={this.updateData} key={key} index={key} />
+                      </td>
+                      : null}
+                    {this.state.filters[0].showPriority ?
+                      <td>
+                        <Dropdowns name={"priority"} dataList={this.state.priorityList} task={currentTask} updateData={this.updateData} key={key} index={key} />
+                      </td>
+                      : null}
+                    {this.state.filters[0].showUser ?
+                      <td>
+                        <Dropdowns name={"username"} dataList={this.state.users} task={currentTask} updateData={this.updateData} key={key} index={key} />
+                      </td>
+                      : null}
+                    {this.state.filters[0].showOption ?
+                      <td>
+                        <Link to={"/edit/" + currentTask._id}>edit</Link> |
+                        <button className='delete-task link-button d-none' onClick={() => { this.deleteTask(currentTask._id) }}>delete</button>
+                      </td>
+                      : null}
                   </tr>
                 })
               }
             </tbody>
           </table>
         </div>
-      </div>
+      </div >
     )
   }
 }
