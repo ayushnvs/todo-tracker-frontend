@@ -117,7 +117,7 @@ export default class TasksList extends Component {
     console.log(this.categoryDataNode)
     this.changeDisplay(this.categoryHeadNode.current)
     this.changeDisplay(this.categoryDataNode.current)
-    
+
     this.setState({
       filters: updatedFilter
     })
@@ -126,9 +126,6 @@ export default class TasksList extends Component {
   handlePriorityChange() {
     let updatedFilter = this.state.filters
     updatedFilter[0].showPriority = !updatedFilter[0].showPriority
-
-    this.changeDisplay(this.priorityHeadNode.current)
-    this.changeDisplay(this.priorityDataNode.current)
 
     this.setState({
       filters: updatedFilter
@@ -172,11 +169,11 @@ export default class TasksList extends Component {
           <div className="show-columns col-4">
             {
               this.state.filters.length > 0
-              ? 
+              ?
               <FilterOptions filters={this.state.filters} handleCategoryChange={this.handleCategoryChange} handleOptionChange={this.handleOptionChange} handlePriorityChange={this.handlePriorityChange} handleUserChange={this.handleUserChange}/>
               : null
             }
-            
+
           </div>
         </div>
         <div className="table-responsive">
@@ -187,7 +184,11 @@ export default class TasksList extends Component {
                 <th ref={this.nameHeadNode}>Task Name</th>
                 <th ref={this.updatesHeadNode}>Updates</th>
                 <th ref={this.categoryHeadNode}>Category</th>
-                <th ref={this.priorityHeadNode}>Prority</th>
+                {console.log('s', this.state.filters[0].showUser)}
+                { this.state.filters ?
+                // <th>Prority</th>
+                console.log('Hey', this.state.filters[0])
+                : null }
                 <th ref={this.userHeadNode}>User</th>
                 <th ref={this.optionHeadNode}>Options</th>
               </tr>
@@ -209,9 +210,11 @@ export default class TasksList extends Component {
                     <td ref={this.categoryDataNode}>
                       <Dropdowns name={"category"} dataList={this.state.categoryList} task={currentTask} updateData={this.updateData} key={key} index={key} />
                     </td>
-                    <td ref={this.priorityDataNode}>
+                    { this.state.filters[0].showPriority ?
+                    <td>
                       <Dropdowns name={"priority"} dataList={this.state.priorityList} task={currentTask} updateData={this.updateData} key={key} index={key} />
                     </td>
+                    : null }
                     <td ref={this.userDataNode}>
                       <Dropdowns name={"username"} dataList={this.state.users} task={currentTask} updateData={this.updateData} key={key} index={key} />
                     </td>
