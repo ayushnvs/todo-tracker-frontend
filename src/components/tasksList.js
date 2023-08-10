@@ -229,7 +229,7 @@ export default class TasksList extends Component {
                     {this.state.filters[0].showOption ?
                       <td>
                         <Link to={"/edit/" + currentTask._id}>Edit<br/></Link>
-                        <button className='delete-task link-button d-none' onClick={() => { this.deleteTask(currentTask._id) }}>Delete</button>
+                        <button className='delete-task link-button' onClick={() => { this.deleteTask(currentTask._id) }}>Delete</button>
                       </td>
                       : null}
                   </tr>
