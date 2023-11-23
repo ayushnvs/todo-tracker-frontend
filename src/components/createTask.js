@@ -21,7 +21,7 @@ export default class CreateTask extends Component {
     }
 
     componentDidMount() {
-        axios.get('http://localhost:5000/users')
+        axios.get('https://todo-tracker-backend-5uzj.onrender.com/users')
             .then(response => {
                 if (response.data.length > 0) {
                     this.setState({
@@ -57,7 +57,7 @@ export default class CreateTask extends Component {
 
                     console.log(task)
 
-                    axios.post('http://localhost:5000/tasks/add', task)
+                    axios.post('https://todo-tracker-backend-5uzj.onrender.com/tasks/add', task)
                         .then(res => console.log(res.data))
 
                     window.location = '/'

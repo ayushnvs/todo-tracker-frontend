@@ -23,7 +23,7 @@ class EditTask extends Component {
 
     componentDidMount() {
 
-        axios.get('http://localhost:5000/tasks/' + this.props.params.id)
+        axios.get('http://https://todo-tracker-backend-5uzj.onrender.com/tasks/' + this.props.params.id)
             .then(res => {
                 this.setState({
                     name: res.data.name,
@@ -38,7 +38,7 @@ class EditTask extends Component {
                 })
             })
 
-        axios.get('http://localhost:5000/users')
+        axios.get('https://todo-tracker-backend-5uzj.onrender.com/users')
             .then(response => {
                 if (response.data.length > 0) {
                     this.setState({
@@ -67,7 +67,7 @@ class EditTask extends Component {
 
                     console.log(task)
 
-                    axios.post('http://localhost:5000/tasks/update/' + this.props.params.id, task)
+                    axios.post('https://todo-tracker-backend-5uzj.onrender.com/tasks/update/' + this.props.params.id, task)
                         .then(res => console.log(res.data))
 
                     window.location = '/'

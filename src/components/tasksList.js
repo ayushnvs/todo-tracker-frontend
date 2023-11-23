@@ -52,7 +52,7 @@ export default class TasksList extends Component {
       }]
     })
 
-    axios.get('http://localhost:5000/tasks')
+    axios.get('https://todo-tracker-backend-5uzj.onrender.com/tasks')
       .then(res => {
         this.setState({
           tasks: res.data.reverse(),
@@ -64,7 +64,7 @@ export default class TasksList extends Component {
       .catch(err => {
         console.log(err)
       })
-    axios.get('http://localhost:5000/users')
+    axios.get('https://todo-tracker-backend-5uzj.onrender.com/users')
       .then(res => {
         this.setState({
           users: res.data.map(user => user.username)
@@ -76,7 +76,7 @@ export default class TasksList extends Component {
   }
 
   deleteTask(id) {
-    axios.delete('http://localhost:5000/tasks/' + id)
+    axios.delete('https://todo-tracker-backend-5uzj.onrender.com/tasks/' + id)
       .then(res => console.log(res.data))
 
     this.setState({
@@ -93,7 +93,7 @@ export default class TasksList extends Component {
     newDataObj[data] = e.currentTarget.value.trim()
     console.log(newDataObj)
 
-    axios.post(`http://localhost:5000/tasks/update/${data}/` + updatedTasks[key]._id, newDataObj)
+    axios.post(`https://todo-tracker-backend-5uzj.onrender.com/tasks/update/${data}/` + updatedTasks[key]._id, newDataObj)
       .then(res => console.log(`${data.toUpperCase()} Updated`))
       .catch(err => console.log(err))
 

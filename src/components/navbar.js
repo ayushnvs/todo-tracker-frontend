@@ -21,6 +21,7 @@ export default function Navbar() {
                             <Link className="nav-link active" aria-current="page" to="/user">CreateUser</Link>
                         </li>
                     </ul>
+                    <input className="theme" type='radio'/>
                 </div>
             </div>
         </nav>
